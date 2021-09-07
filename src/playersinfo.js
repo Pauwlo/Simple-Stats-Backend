@@ -1,22 +1,34 @@
-const getEmblem = require('./getEmblem')
-
-const OG_UIDS = [
-	'4818c3c8a06a1a47',
-]
+const Database = require('./Database')
 
 function playersinfo(req, res) {
 	const response = {}
+	let knownPlayers = []
 
-	let i = 0
-	req.body.players?.forEach(player => {
-		response[i] = {
-			r: OG_UIDS.includes(player.uid) ? 42 : 0,
-			e: getEmblem(player.uid)
-		}
-		i++
-	})
+	const db = Database.getInstance()
+	db.getPlayers()
+		.then(players => knownPlayers = players)
+		.catch(console.error)
+		.finally(() => {
+			let i = 0
+			req.body.players?.forEach(player => {
+				let emblem = process.env.DEFAULT_EMBLEM
+				let rank = process.env.DEFAULT_RANK
 
-	res.send(response)
+				if (p = knownPlayers.find(p => p.uid === player.uid)) {
+					emblem = p.emblem
+					rank = p.rank
+				}
+
+				response[i] = {
+					r: rank,
+					e: emblem
+				}
+
+				i++
+			})
+
+			res.send(response)
+		})
 }
 
 module.exports = playersinfo
