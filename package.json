@@ -1,5 +1,5 @@
 {
-  "name": "baguette-emblems",
+  "name": "simple-stats-backend",
   "version": "0.0.1",
   "private": true,
   "main": "app.js",
