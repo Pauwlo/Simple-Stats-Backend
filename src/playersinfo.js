@@ -9,8 +9,8 @@ function playersinfo(req, res) {
 		.then(players => knownPlayers = players)
 		.catch(console.error)
 		.finally(() => {
-			let i = 0
 			req.body.players?.forEach(player => {
+				const index = player.playerIndex
 				let emblem = process.env.DEFAULT_EMBLEM
 				let rank = process.env.DEFAULT_RANK
 
@@ -19,12 +19,10 @@ function playersinfo(req, res) {
 					rank = p.rank
 				}
 
-				response[i] = {
+				response[index] = {
 					r: rank,
 					e: emblem
 				}
-
-				i++
 			})
 
 			res.send(response)
